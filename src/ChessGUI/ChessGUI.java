@@ -1,3 +1,5 @@
+package ChessGUI;
+
 import java.awt.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -9,7 +11,7 @@ public class ChessGUI extends JPanel {
 
     ChessGUI(int n) {
         try {
-            img = ImageIO.read(getClass().getResource("resources/queen.png"));
+            img = ImageIO.read(getClass().getResource("/resources/queen.png"));
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
@@ -40,9 +42,4 @@ public class ChessGUI extends JPanel {
             }
         }
     }
-
-    public static void main(String[] args) {
-        ChessGUI chess = new ChessGUI(4);
-    }
-
 }
