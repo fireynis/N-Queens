@@ -3,6 +3,8 @@ package NQueens;
 import Board.Board;
 import ChessGUI.ChessGUI;
 
+import java.util.Stack;
+
 public class NQueens {
 
     NQueens(int n) {
@@ -10,23 +12,19 @@ public class NQueens {
     }
 
     private void doBlindSearch(int n) {
-        Board board = new Board(n);
-        board = addQueens(board, n);
-        ChessGUI gui = new ChessGUI(board);
+        int[] board = new int[n];
+        addQueen(board, 0);
     }
 
-    private Board addQueens(Board board, int n) {
-        int x = randomNum(0, n - 1);
-        int y = randomNum(0, n - 1);
+    private void addQueen(int[] board, int Queens) {
 
-        for(int i = 0; i < n; i++) {
-            while (board.locHasQueen(x ,y) || board.rowHasQueen(x) || board.colHasQueen(y)) {
-                x = randomNum(0, n - 1);
-                y = randomNum(0, n-1);
+        if (Queens == board.length) {
+            ChessGUI display = new ChessGUI(board);
+        } else {
+            for (int i = 0;i < board.length; i++) {
+
             }
-            board.addQueen(x, y);
         }
-        return board;
     }
 
     int randomNum(int min, int max)

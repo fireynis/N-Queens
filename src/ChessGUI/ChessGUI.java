@@ -10,7 +10,7 @@ public class ChessGUI extends JPanel {
     JFrame frame = new JFrame("N-Queens");
     Image img;
 
-    public ChessGUI(Board board) {
+    public ChessGUI(int[] board) {
         try {
             img = ImageIO.read(getClass().getResource("/resources/queen.png"));
         } catch (Exception e) {
@@ -21,15 +21,15 @@ public class ChessGUI extends JPanel {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setBackground(Color.yellow);
-        frame.setLayout(new GridLayout(board.length(), board.length()));
+        frame.setLayout(new GridLayout(board.length, board.length));
         makeChessBoard(board);
         frame.setSize(600, 600);
         frame.setVisible(true);
     }
 
-    private void makeChessBoard(Board n) {
-        for (int i = 0;i < n.length(); i++) {
-            for (int j = 0;j < n.length(); j++) {
+    private void makeChessBoard(int[] n) {
+        for (int i = 0;i < n.length; i++) {
+            for (int j = 0;j < n.length; j++) {
                 JButton b = new JButton();
                 if (i%2 == 0) {
                     if (j%2 == 0) {
@@ -44,7 +44,7 @@ public class ChessGUI extends JPanel {
                         b.setBackground(Color.white);
                     }
                 }
-                if(n.locHasQueen(i, j)) {
+                if(n[i] == j) {
                     ImageIcon queen = new ImageIcon(img);
                     b.setIcon(queen);
                 }
