@@ -3,13 +3,14 @@ package ChessGUI;
 import java.awt.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import Board.Board;
 
 public class ChessGUI extends JPanel {
 
     JFrame frame = new JFrame("N-Queens");
     Image img;
 
-    ChessGUI(int n) {
+    public ChessGUI(Board board) {
         try {
             img = ImageIO.read(getClass().getResource("/resources/queen.png"));
         } catch (Exception e) {
@@ -20,23 +21,33 @@ public class ChessGUI extends JPanel {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setBackground(Color.yellow);
-        frame.setLayout(new GridLayout(n, n));
-        makeChessBoard(n);
+        frame.setLayout(new GridLayout(board.length(), board.length()));
+        makeChessBoard(board);
         frame.setSize(600, 600);
         frame.setVisible(true);
     }
 
-    private void makeChessBoard(int n) {
-        for (int i = 0;i < n; i++) {
-            for (int j = 0;j < n; j++) {
+    private void makeChessBoard(Board n) {
+        for (int i = 0;i < n.length(); i++) {
+            for (int j = 0;j < n.length(); j++) {
                 JButton b = new JButton();
-                if (j%2 == 0) {
-                    b.setBackground(Color.white);
+                if (i%2 == 0) {
+                    if (j%2 == 0) {
+                        b.setBackground(Color.white);
+                    } else {
+                        b.setBackground(Color.black);
+                    }
                 } else {
-                    b.setBackground(Color.black);
+                    if (j%2 == 0) {
+                        b.setBackground(Color.black);
+                    } else {
+                        b.setBackground(Color.white);
+                    }
                 }
-                ImageIcon queen = new ImageIcon(img);
-                b.setIcon(queen);
+                if(n.locHasQueen(i, j)) {
+                    ImageIcon queen = new ImageIcon(img);
+                    b.setIcon(queen);
+                }
                 b.setSize(100, 100);
                 this.frame.getContentPane().add(b);
             }
