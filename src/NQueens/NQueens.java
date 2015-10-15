@@ -10,10 +10,10 @@ public class NQueens {
 
     private void doBlindSearch(int n) {
         int[] board = new int[n];
-        addQueen(board, 0);
+        blindSearch(board, 0);
     }
 
-    private void addQueen(int[] board, int Queen) {
+    private void blindSearch(int[] board, int Queen) {
 
         if (Queen == board.length) {
             ChessGUI display = new ChessGUI(board);
@@ -21,7 +21,7 @@ public class NQueens {
             for (int i = 0;i < board.length; i++) {
                 board[Queen] = i;
                 if (canPlaceQueen(board, Queen)) {
-                    addQueen(board, Queen+1);
+                    blindSearch(board, Queen+1);
                 }
             }
         }
@@ -40,12 +40,6 @@ public class NQueens {
             }
         }
         return true;
-    }
-
-    int randomNum(int min, int max)
-    {
-        int range = (max - min) + 1;
-        return (int)(Math.random() * range) + min;
     }
 
     public static void main(String[] args) {
