@@ -1,9 +1,6 @@
 package NQueens;
 
-import Board.Board;
 import ChessGUI.ChessGUI;
-
-import java.util.Stack;
 
 public class NQueens {
 
@@ -16,15 +13,33 @@ public class NQueens {
         addQueen(board, 0);
     }
 
-    private void addQueen(int[] board, int Queens) {
+    private void addQueen(int[] board, int Queen) {
 
-        if (Queens == board.length) {
+        if (Queen == board.length) {
             ChessGUI display = new ChessGUI(board);
         } else {
             for (int i = 0;i < board.length; i++) {
-
+                board[Queen] = i;
+                if (canPlaceQueen(board, Queen)) {
+                    addQueen(board, Queen+1);
+                }
             }
         }
+    }
+
+    private boolean canPlaceQueen(int[] board, int n) {
+        for (int i = 0; i < n; i++) {
+            if (board[i] == board[n]){
+                return false;
+            }
+            if ((board[i] - board[n]) == (n - i)) {
+                return false;
+            }
+            if ((board[n] - board[i]) == (n - i)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     int randomNum(int min, int max)
@@ -34,7 +49,7 @@ public class NQueens {
     }
 
     public static void main(String[] args) {
-        NQueens q = new NQueens(4);
+        NQueens q = new NQueens(8);
     }
 
 }
