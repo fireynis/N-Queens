@@ -1,44 +1,27 @@
 package Board;
 
+import ChessGUI.ChessGUI;
+
+import java.util.Random;
+import java.util.Stack;
+
 public class Board {
 
-    int[][] board;
-    boolean hasQueen;
-    public int numQueens;
+    public int[] board;
+    public Random gen;
 
-    public Board(int n) {
-        this.board = new int[n][n];
-        this.hasQueen = false;
-        numQueens = 0;
+    public Board(int n, int seed) {
+        this.board = new int[n];
+        this.gen = new Random(seed);
     }
 
-    public boolean rowHasQueen(int row) {
-
-        for (int i = 0; i < this.board.length;i++) {
-            if (this.board[row][i] == 1) {
-                return true;
-            }
-        }
-        return false;
-    }
-    public boolean colHasQueen(int col) {
-
-        for (int[] aBoard : this.board) {
-            if (aBoard[col] == 1) {
-                return true;
-            }
-        }
-        return false;
+    public Board(Board org) {
+        this.board = org.board;
+        this.gen = org.gen;
     }
 
     public void addQueen(int x, int y) {
-        this.board[x][y] = 1;
-        this.hasQueen = true;
-        this.numQueens++;
-    }
-
-    public boolean hasQueen() {
-        return this.hasQueen;
+        this.board[x] = y;
     }
 
     public int length() {
@@ -46,11 +29,56 @@ public class Board {
     }
 
     public boolean locHasQueen(int x, int y) {
-        return this.board[x][y] == 1;
+        return this.board[x] == y;
     }
 
     public int getHValue() {
-        //TODO - Implement hValue determination
-        return 0;
+        int h = 0;
+
+        for (int i = 0; i < this.board.length; i++) {
+            for (int j = i+1; j < this.board.length; j++) {
+                if (this.board[i] == this.board[j]) {
+                    h++;
+                }
+                int offset = j-1;
+                if (board[i] == board[j] - offset || board[i] == board[j] + offset) {
+                    h++;
+                }
+            }
+        }
+        return h;
+    }
+
+    public void print() {
+        ChessGUI gui = new ChessGUI(this.board);
+    }
+
+    public Board moveQueens() {
+        Board boardCopy = new Board(this);
+        Board bestBoard = new Board(this);
+
+        for (int i = 0; i < this.board.length; i++) {
+            int newCol = this.gen.nextInt(this.board.length);
+            while (boardCopy.getCol(i) == newCol) {
+                newCol = this.gen.nextInt(this.board.length);
+            }
+            boardCopy.setCol(i, newCol);
+            if (boardCopy.getHValue() < bestBoard.getHValue()) {
+                bestBoard = boardCopy;
+            }
+        }
+        if(this.getHValue() < bestBoard.getHValue()) {
+            return this;
+        } else {
+            return bestBoard;
+        }
+    }
+
+    public void setCol(int row, int newCol) {
+        this.board[row] = newCol;
+    }
+
+    public  int getCol(int row) {
+        return this.board[row];
     }
 }

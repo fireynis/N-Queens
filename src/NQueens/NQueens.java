@@ -3,49 +3,48 @@ package NQueens;
 import Board.Board;
 import ChessGUI.ChessGUI;
 
-import java.util.Random;
+import java.util.Stack;
 
 public class NQueens {
 
-    Random gen;
-    int seed;
+    int boardStates;
 
-    NQueens(int n) {
-        doBlindSearch(n);
+    NQueens(int n, int seed) {
+//        doBlindSearch(n);
+        doHillClimber(n, seed);
     }
 
     private void doBlindSearch(int n) {
         int[] blindBoard = new int[n];
         blindSearch(blindBoard, 0);
-        doHillClimber(n);
     }
 
-    private void doHillClimber(int n) {
-        Board board = new Board(n);
-        this.seed = (52);
-        this.gen = new Random(seed);
+    private void doHillClimber(int n, int seed) {
+        Board board = new Board(n, seed);
+        this.boardStates = 0;
+
         board = addQueens(board, n);
-        int h = board.getHValue();
-        hillClimber(board, n, h);
+
+        hillClimber(board);
     }
 
-    private void hillClimber(Board board, int n, int h) {
-        if (h == 0) {
-            //TODO - Add print section here to show board.
-        } else {
-            //TODO - The actual hill climb part. Likely create options and select best board state, then recall hillclimber with new board.
+    private void hillClimber(Board board) {
+        while (board.getHValue() != 0) {
+            board = board.moveQueens();
+            System.out.println(board.getHValue());
+            this.boardStates++;
         }
+        System.out.println(this.boardStates);
+        board.print();
     }
 
     private Board addQueens(Board board, int n) {
         for (int i = 0;i < n; i++) {
-            int row = gen.nextInt(n);
-            int col = gen.nextInt(n);
-            while (board.locHasQueen(row, col)) {
-                row = gen.nextInt(n);
-                col = gen.nextInt(n);
+            int col = board.gen.nextInt(n);
+            while (board.locHasQueen(i, col)) {
+                col = board.gen.nextInt(n);
             }
-            board.addQueen(row, col);
+            board.addQueen(i, col);
         }
         return board;
     }
@@ -58,7 +57,7 @@ public class NQueens {
             for (int i = 0;i < board.length; i++) {
                 board[Queen] = i;
                 if (canPlaceQueen(board, Queen)) {
-                    blindSearch(board, Queen+1);
+                    blindSearch(board, Queen + 1);
                 }
             }
         }
@@ -80,7 +79,7 @@ public class NQueens {
     }
 
     public static void main(String[] args) {
-        NQueens q = new NQueens(8);
+        NQueens q = new NQueens(4, 52);
     }
 
 }
