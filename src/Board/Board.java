@@ -20,6 +20,11 @@ public class Board {
         this.gen = org.gen;
     }
 
+    public Board(int[] board, Random gen) {
+        this.board = board;
+        this.gen = gen;
+    }
+
     public void addQueen(int x, int y) {
         this.board[x] = y;
     }
@@ -40,8 +45,10 @@ public class Board {
                 if (this.board[i] == this.board[j]) {
                     h++;
                 }
-                int offset = j-1;
-                if (board[i] == board[j] - offset || board[i] == board[j] + offset) {
+                if ((board[i] - board[j]) == (j - i)) {
+                    h++;
+                }
+                if ((board[j] - board[i]) == (j - i)) {
                     h++;
                 }
             }
@@ -80,5 +87,17 @@ public class Board {
 
     public  int getCol(int row) {
         return this.board[row];
+    }
+
+    public Board moveQueen(int queen) {
+        int[] copy = new int[this.board.length];
+        System.arraycopy(this.board, 0, copy, 0, this.board.length);
+        int newCol = this.gen.nextInt(copy.length);
+
+        while (copy[queen] == newCol) {
+            newCol = this.gen.nextInt(copy.length);
+        }
+        copy[queen] = newCol;
+        return new Board(copy, this.gen);
     }
 }

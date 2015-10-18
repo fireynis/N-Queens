@@ -3,7 +3,9 @@ package NQueens;
 import Board.Board;
 import ChessGUI.ChessGUI;
 
+import java.util.Random;
 import java.util.Stack;
+import java.util.Vector;
 
 public class NQueens {
 
@@ -21,7 +23,6 @@ public class NQueens {
 
     private void doHillClimber(int n, int seed) {
         Board board = new Board(n, seed);
-        this.boardStates = 0;
 
         board = addQueens(board, n);
 
@@ -29,13 +30,28 @@ public class NQueens {
     }
 
     private void hillClimber(Board board) {
-        while (board.getHValue() != 0) {
-            board = board.moveQueens();
-            System.out.println(board.getHValue());
-            this.boardStates++;
+        Vector<Board> goodies = new Vector<>();
+
+        if (board.getHValue() == 0) {
+            board.print();
+            return;
+        } else {
+            for (int i = 0; i < board.length(); i++) {
+                Board newBoard = board.moveQueen(i);
+                if (board.getHValue() >= newBoard.getHValue()) {
+                    goodies.add(newBoard);
+                }
+            }
+            int h = board.getHValue();
+            Board bestBoard = board;
+            for (Board aBoard : goodies) {
+                if (aBoard.getHValue() < h) {
+                    bestBoard = aBoard;
+                    h = aBoard.getHValue();
+                }
+            }
+            hillClimber(bestBoard);
         }
-        System.out.println(this.boardStates);
-        board.print();
     }
 
     private Board addQueens(Board board, int n) {
@@ -79,7 +95,7 @@ public class NQueens {
     }
 
     public static void main(String[] args) {
-        NQueens q = new NQueens(4, 52);
+        NQueens q = new NQueens(4, 54351);
     }
 
 }
